@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -18,6 +19,7 @@ import { FormControl, FormMessage } from "@/components/ui/form";
 import { FormItem, FormLabel } from "@/components/ui/form";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 
 const registerSchema = z.object({
   name: z.string().trim().min(1, { message: "Nome é obrigatório" }),
@@ -33,6 +35,7 @@ const registerSchema = z.object({
 });
 
 const SignUpForm = () => {
+  const navigate = useRouter();
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -44,6 +47,21 @@ const SignUpForm = () => {
 
   async function onSubmit(values: z.infer<typeof registerSchema>) {
     console.log("Form values:", values);
+    await authClient.signUp.email(
+      {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      },
+      {
+        onSuccess: () => {
+          navigate.push("/dashboard");
+        },
+        onError: (error) => {
+          console.error("Erro ao criar conta:", error);
+        },
+      },
+    );
   }
 
   return (

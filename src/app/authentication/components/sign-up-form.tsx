@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -55,10 +56,13 @@ const SignUpForm = () => {
       },
       {
         onSuccess: () => {
+          toast.success("Conta criada com sucesso!");
           navigate.push("/dashboard");
         },
-        onError: (error) => {
-          console.error("Erro ao criar conta:", error);
+        onError: (ctx) => {
+          if (ctx.error?.code === "USER_ALREADY_EXISTS") {
+            toast.error("E-mail já cadastrado");
+          }
         },
       },
     );

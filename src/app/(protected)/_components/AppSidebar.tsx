@@ -32,6 +32,21 @@ import {
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
 
+const name = (name: string | undefined) => {
+  if (!name) return "";
+
+  const nameArray = name.split(" ");
+  const firstLetter = nameArray[0].charAt(0).toUpperCase();
+  const lastLetter = nameArray[nameArray.length - 1].charAt(0).toUpperCase();
+  name = firstLetter + lastLetter;
+
+  console.log("name", name);
+  return name
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+
 const items = [
   {
     title: "Dashboard",
@@ -72,7 +87,7 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="border-b p-4">
-        <Image src="/logo.svg" alt="Doutor Agenda" width={430} height={100} />
+        <Image src="/Logo2.svg" alt="Doutor Agenda" width={128} height={32} />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -100,10 +115,12 @@ export function AppSidebar() {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg">
                   <Avatar>
-                    <AvatarFallback>F</AvatarFallback>
+                    <AvatarFallback>
+                      {name(session.data?.user.name)}
+                    </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="text-sm">Clinica Nova</p>
+                    <p className="text-sm">{session.data?.user.clinicName}</p>
                     <p className="text-muted-foreground text-sm">
                       {session.data?.user.email}
                     </p>

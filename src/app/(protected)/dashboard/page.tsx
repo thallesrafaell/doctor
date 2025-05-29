@@ -1,13 +1,12 @@
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 
 import { db } from "@/db";
 import { usersToClinicsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
-import SignOutButton from "./components/sign-out-buttom";
+import SignOutButton from "./_components/sign-out-buttom";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({

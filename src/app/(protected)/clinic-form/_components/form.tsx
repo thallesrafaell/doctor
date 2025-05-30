@@ -32,21 +32,18 @@ export default function FormClinc() {
     },
   });
 
+  // ... existing code ...
   async function onSubmit(data: LoginFormValues) {
     try {
       await createClinic(data.name);
-      toast.success("Clínica criada com sucesso!");
-      form.reset();
     } catch (error) {
-      if (isRedirectError(error)) {
-        toast.success("Clínica criada com sucesso!");
-        form.reset();
-        return;
+      if (!isRedirectError(error)) {
+        console.error("Erro ao criar clínica:", error);
+        toast.error("Erro ao criar clínica");
       }
-      console.error("Erro ao criar clínica:", error);
-      toast.error("Erro ao criar clínica");
     }
   }
+  // ... existing code ...
 
   return (
     <>
